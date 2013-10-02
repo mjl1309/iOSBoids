@@ -62,7 +62,7 @@
     }
     self.positionVector = GLKVector3Make(newX, newY, newZ);
     
-    NSLog(@"Position: %f, %f, %f", self.positionVector.x, self.positionVector.y, self.positionVector.z);
+//    NSLog(@"Position: %f, %f, %f", self.positionVector.x, self.positionVector.y, self.positionVector.z);
 }
 
 

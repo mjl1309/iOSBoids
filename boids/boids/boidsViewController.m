@@ -87,6 +87,10 @@ GLfloat gCubeVertexData[216] =
     GLuint _vertexBuffer;
     
     NSMutableArray *_boids;
+    
+    float _nearClippingPlaneDist;
+    float _farClippingPlaneDist;
+    float _fov;
 }
 
 @property (strong, nonatomic) EAGLContext *context;
@@ -120,9 +124,51 @@ GLfloat gCubeVertexData[216] =
     [self setupGL];
     
     _boids = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 1; i++) {
         [ _boids addObject: [[Boid alloc] init] ];
     }
+    
+    // Gesture Recognizers
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             initWithTarget:self
+                                             action:@selector(respondToTapGesture:)];
+    tapRecognizer.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:tapRecognizer];
+    
+    _nearClippingPlaneDist = 0.1f;
+    _farClippingPlaneDist = 100.0f;
+    _fov = 45.0f;
+}
+
+- (void)respondToTapGesture:(UITapGestureRecognizer*)tapGestureRecognizer {
+    CGPoint screenCoordinates = [tapGestureRecognizer locationInView:tapGestureRecognizer.view];
+//    NSLog(@"tap at:%@", NSStringFromCGPoint( screenCoordinates) );
+    CGPoint normalizedCoordinates = CGPointMake( (screenCoordinates.x / self.view.bounds.size.width) - 0.5,
+                                                        ((screenCoordinates.y / self.view.bounds.size.height) - 0.5) * -1 );
+//    NSLog(@"    tap at:%@", NSStringFromCGPoint( nearClippingPlaneCoordinates) );
+    float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
+    float screenWidth = self.view.bounds.size.width;
+    float screenHeight = self.view.bounds.size.height;
+    
+//    float nearPlaneHeight = _nearClippingPlane * tanf(screenHeight * M_PI / 360.0f);
+    
+    float nearPlaneHeight = 2 * _nearClippingPlaneDist * tanf( _fov / 2.0f );
+    float nearPlaneWidth = nearPlaneHeight * aspect;
+    
+    NSLog(@"near plane dimensions:%f, %f", nearPlaneWidth, nearPlaneHeight);
+    
+    CGPoint tapInCameraCoordinates = CGPointMake( normalizedCoordinates.x * nearPlaneWidth,
+                                                   normalizedCoordinates.y * nearPlaneWidth);
+    
+    GLKVector3 tapLocationInCameraCoordinates = GLKVector3Make(tapInCameraCoordinates.x,
+                                                               tapInCameraCoordinates.y,
+                                                               _nearClippingPlaneDist);
+    Boid *b = [_boids objectAtIndex:0];
+    b.positionVector = tapLocationInCameraCoordinates;
+    b.velocityVector = GLKVector3Make(0, 0, 0);
+    
+//    NSLog(@"    tap at:%@", NSStringFromCGPoint( tapInCameraCoordinates ) );
+     NSLog(@"Position: %f, %f, %f", b.positionVector.x, b.positionVector.y, b.positionVector.z);
 }
 
 - (void)dealloc
@@ -199,10 +245,8 @@ GLfloat gCubeVertexData[216] =
 - (void)update
 {
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
-//    NSLog(@"width: %f", self.view.bounds.size.width);
-//    NSLog(@"height: %f", self.view.bounds.size.height);
     
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(45.0f), aspect, 0.1f, 100.0f);
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(_fov), aspect, _nearClippingPlaneDist, _farClippingPlaneDist);
     
     self.effect.transform.projectionMatrix = projectionMatrix;
     
@@ -227,7 +271,7 @@ GLfloat gCubeVertexData[216] =
         // Compute the model view matrix for the object rendered with GLKit
         GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(currentBoid.positionVector.x,
                                                                currentBoid.positionVector.y,
-                                                               -1.5f);
+                                                               currentBoid.positionVector.z);
         //    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, _rotation, 1.0f, 1.0f, 1.0f);
         modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
         
