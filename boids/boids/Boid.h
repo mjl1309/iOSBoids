@@ -10,11 +10,13 @@
 #import <GLKit/GLKit.h>
 
 @interface Boid : NSObject {
-    
+    GLKVector3 _worldUpVector;
     
 }
 
-@property (nonatomic, strong) NSArray *behaviors;
+@property (nonatomic, assign) float speed;
+
+@property (nonatomic, strong) NSMutableArray *behaviors;
 
 @property (nonatomic, assign) GLKVector3 positionVector;
 
@@ -24,8 +26,20 @@
 
 @property (nonatomic, assign) GLKVector3 upVector;
 
+@property (nonatomic, assign) GLKVector3 sideVector;
 
-- (void)updateWithTime:(NSTimeInterval)dt;
+@property (nonatomic, assign) GLKMatrix4 modelViewMatrix;
+
+@property (nonatomic, assign) float mass;
+
+- (void)updateWithTime:(NSTimeInterval)dt
+      worldFieldOfView:(float)worldFieldOfView
+      worldAspectRatio:(float)worldAspectRation
+        worldNearPlane:(float)worldnearPlane
+         worldFarPlane:(float)worldFarPlane;
+
+- (void)updateSteering:(NSTimeInterval)dt
+            otherBoids:(NSMutableArray*)otherBoids;
 
 
 

@@ -124,7 +124,7 @@ GLfloat gCubeVertexData[216] =
     [self setupGL];
     
     _boids = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 10; i++) {
         [ _boids addObject: [[Boid alloc] init] ];
     }
     
@@ -135,8 +135,8 @@ GLfloat gCubeVertexData[216] =
     tapRecognizer.numberOfTapsRequired = 1;
     [self.view addGestureRecognizer:tapRecognizer];
     
-    _nearClippingPlaneDist = 0.1f;
-    _farClippingPlaneDist = 100.0f;
+    _nearClippingPlaneDist = 5.0f;
+    _farClippingPlaneDist = 20.0f;
     _fov = 45.0f;
 }
 
@@ -160,15 +160,15 @@ GLfloat gCubeVertexData[216] =
     CGPoint tapInCameraCoordinates = CGPointMake( normalizedCoordinates.x * nearPlaneWidth,
                                                    normalizedCoordinates.y * nearPlaneWidth);
     
-    GLKVector3 tapLocationInCameraCoordinates = GLKVector3Make(tapInCameraCoordinates.x,
-                                                               tapInCameraCoordinates.y,
-                                                               _nearClippingPlaneDist);
-    Boid *b = [_boids objectAtIndex:0];
-    b.positionVector = tapLocationInCameraCoordinates;
-    b.velocityVector = GLKVector3Make(0, 0, 0);
+    GLKVector3 tapLocationInCameraCoordinates = GLKVector3Make(tapInCameraCoordinates.x * 50,
+                                                               tapInCameraCoordinates.y * 50,
+                                                               _nearClippingPlaneDist * -50);
+//    Boid *b = [_boids objectAtIndex:0];
+//    b.positionVector = tapLocationInCameraCoordinates;
+//    b.velocityVector = GLKVector3Make(0, 0, 0);
     
 //    NSLog(@"    tap at:%@", NSStringFromCGPoint( tapInCameraCoordinates ) );
-     NSLog(@"Position: %f, %f, %f", b.positionVector.x, b.positionVector.y, b.positionVector.z);
+//     NSLog(@"Position: %f, %f, %f", b.positionVector.x, b.positionVector.y, b.positionVector.z);
 }
 
 - (void)dealloc
@@ -251,7 +251,17 @@ GLfloat gCubeVertexData[216] =
     self.effect.transform.projectionMatrix = projectionMatrix;
     
     for (Boid *currentBoid in _boids) {
-        [currentBoid updateWithTime:self.timeSinceLastUpdate];
+        [currentBoid updateWithTime:self.timeSinceLastUpdate
+                   worldFieldOfView:_fov
+                   worldAspectRatio:aspect
+                     worldNearPlane:_nearClippingPlaneDist
+                      worldFarPlane:_farClippingPlaneDist
+         ];
+    }
+    
+    for (Boid *currentBoid in _boids) {
+        [currentBoid updateSteering:self.timeSinceLastUpdate
+                         otherBoids:_boids];
     }
     
     _rotation += self.timeSinceLastUpdate * 0.5f;
@@ -265,13 +275,17 @@ GLfloat gCubeVertexData[216] =
     glBindVertexArrayOES(_vertexArray);
     
     for (Boid *currentBoid in _boids) {
-        GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -4.0f);
+        GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
         //        baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotation, 0.0f, 0.0f, 1.0f);
         
         // Compute the model view matrix for the object rendered with GLKit
-        GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(currentBoid.positionVector.x,
-                                                               currentBoid.positionVector.y,
-                                                               currentBoid.positionVector.z);
+        
+//        GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(currentBoid.positionVector.x,
+//                                                               currentBoid.positionVector.y,
+//                                                               currentBoid.positionVector.z);
+        
+        GLKMatrix4 modelViewMatrix = currentBoid.modelViewMatrix;
+        
         //    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, _rotation, 1.0f, 1.0f, 1.0f);
         modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
         

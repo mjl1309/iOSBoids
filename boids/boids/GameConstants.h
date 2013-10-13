@@ -7,6 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GLKit/GLKit.h>
 
 #define ARC4RANDOM_MAX      0x100000000
 
+static float kSizeOfBoid = 1.0f;
+
+static float kMaxSteeringVectorMagnitude = 100;

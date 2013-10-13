@@ -27,6 +27,10 @@
 		279C6E6D17FA4A1000B98426 /* boidsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 279C6E6C17FA4A1000B98426 /* boidsTests.m */; };
 		279C6E7817FA4EE600B98426 /* Boid.m in Sources */ = {isa = PBXBuildFile; fileRef = 279C6E7717FA4EE600B98426 /* Boid.m */; };
 		279C6E7B17FA589200B98426 /* GameConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 279C6E7A17FA589200B98426 /* GameConstants.m */; };
+		27AEBBF2180A0EA70071DC2A /* SteeringBehavior.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AEBBF1180A0EA70071DC2A /* SteeringBehavior.m */; };
+		27AEBBF5180A10F60071DC2A /* SteeringBehaviorAlignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AEBBF4180A10F60071DC2A /* SteeringBehaviorAlignment.m */; };
+		27AEBBF8180A1CFD0071DC2A /* SteeringBehaviorCohesion.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AEBBF7180A1CFD0071DC2A /* SteeringBehaviorCohesion.m */; };
+		27AEBBFB180A23360071DC2A /* SteeringBehaviorSeparation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AEBBFA180A23360071DC2A /* SteeringBehaviorSeparation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +71,14 @@
 		279C6E7717FA4EE600B98426 /* Boid.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Boid.m; sourceTree = "<group>"; };
 		279C6E7917FA589200B98426 /* GameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConstants.h; sourceTree = "<group>"; };
 		279C6E7A17FA589200B98426 /* GameConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameConstants.m; sourceTree = "<group>"; };
+		27AEBBF0180A0EA70071DC2A /* SteeringBehavior.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SteeringBehavior.h; sourceTree = "<group>"; };
+		27AEBBF1180A0EA70071DC2A /* SteeringBehavior.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SteeringBehavior.m; sourceTree = "<group>"; };
+		27AEBBF3180A10F60071DC2A /* SteeringBehaviorAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SteeringBehaviorAlignment.h; sourceTree = "<group>"; };
+		27AEBBF4180A10F60071DC2A /* SteeringBehaviorAlignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SteeringBehaviorAlignment.m; sourceTree = "<group>"; };
+		27AEBBF6180A1CFD0071DC2A /* SteeringBehaviorCohesion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SteeringBehaviorCohesion.h; sourceTree = "<group>"; };
+		27AEBBF7180A1CFD0071DC2A /* SteeringBehaviorCohesion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SteeringBehaviorCohesion.m; sourceTree = "<group>"; };
+		27AEBBF9180A23360071DC2A /* SteeringBehaviorSeparation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SteeringBehaviorSeparation.h; sourceTree = "<group>"; };
+		27AEBBFA180A23360071DC2A /* SteeringBehaviorSeparation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SteeringBehaviorSeparation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +151,14 @@
 				279C6E5717FA4A1000B98426 /* boidsViewController.m */,
 				279C6E7617FA4EE600B98426 /* Boid.h */,
 				279C6E7717FA4EE600B98426 /* Boid.m */,
+				27AEBBF0180A0EA70071DC2A /* SteeringBehavior.h */,
+				27AEBBF9180A23360071DC2A /* SteeringBehaviorSeparation.h */,
+				27AEBBFA180A23360071DC2A /* SteeringBehaviorSeparation.m */,
+				27AEBBF1180A0EA70071DC2A /* SteeringBehavior.m */,
+				27AEBBF6180A1CFD0071DC2A /* SteeringBehaviorCohesion.h */,
+				27AEBBF7180A1CFD0071DC2A /* SteeringBehaviorCohesion.m */,
+				27AEBBF3180A10F60071DC2A /* SteeringBehaviorAlignment.h */,
+				27AEBBF4180A10F60071DC2A /* SteeringBehaviorAlignment.m */,
 				279C6E7917FA589200B98426 /* GameConstants.h */,
 				279C6E7A17FA589200B98426 /* GameConstants.m */,
 				279C6E5917FA4A1000B98426 /* Images.xcassets */,
@@ -276,11 +296,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27AEBBF2180A0EA70071DC2A /* SteeringBehavior.m in Sources */,
 				279C6E5817FA4A1000B98426 /* boidsViewController.m in Sources */,
 				279C6E4E17FA4A1000B98426 /* boidsAppDelegate.m in Sources */,
 				279C6E4A17FA4A1000B98426 /* main.m in Sources */,
 				279C6E7817FA4EE600B98426 /* Boid.m in Sources */,
 				279C6E7B17FA589200B98426 /* GameConstants.m in Sources */,
+				27AEBBF8180A1CFD0071DC2A /* SteeringBehaviorCohesion.m in Sources */,
+				27AEBBFB180A23360071DC2A /* SteeringBehaviorSeparation.m in Sources */,
+				27AEBBF5180A10F60071DC2A /* SteeringBehaviorAlignment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +513,7 @@
 				279C6E7217FA4A1000B98426 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		279C6E7317FA4A1000B98426 /* Build configuration list for PBXNativeTarget "boidsTests" */ = {
 			isa = XCConfigurationList;
@@ -497,6 +522,7 @@
 				279C6E7517FA4A1000B98426 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
