@@ -52,18 +52,27 @@
         _worldUpVector = GLKVector3Make( 0.0f, 1.0f, 0.0f );
         
 //        SEL mySelector = @selector(alignment::);
+        float awarenessRadius = 7.0f;
+        float viewConeAngle = 45.0f;
         self.behaviors = [[NSMutableArray alloc] init];
         [self.behaviors addObject:[[SteeringBehaviorSeparation alloc] initWithOwner:self
-                                                                            weight:10.0f]];
+                                                                            weight:0.5f
+                                                                    awarenessRadius:awarenessRadius
+                                                                      viewConeAngle:viewConeAngle]];
         
         [self.behaviors addObject:[[SteeringBehaviorAlignment alloc] initWithOwner:self
-                                                                            weight:100.0f]];
+                                                                            weight:0.5f
+                                                                    awarenessRadius:awarenessRadius
+                                                                     viewConeAngle:20.0]];
         
         [self.behaviors addObject:[[SteeringBehaviorCohesion alloc] initWithOwner:self
-                                                                           weight:1.0f]];
+                                                                           weight:1.0f
+                                                                   awarenessRadius:awarenessRadius
+                                                                    viewConeAngle:viewConeAngle]];
         for (SteeringBehavior *behavior in self.behaviors) {
             // some setup code
         }
+        
 
     }
     return self;
@@ -77,8 +86,8 @@
 {
     
 //    temporary!
-    float xBound = fabsf( worldAspectRatio * self.positionVector.z ) / 2;
-    float yBound = fabsf( tanf( GLKMathDegreesToRadians( worldFieldOfView / 2 ) ) * self.positionVector.z ) + kSizeOfBoid;
+    float xBound = fabsf( worldAspectRatio * self.positionVector.z ) / 2; // not / 2
+    float yBound = fabsf( tanf( GLKMathDegreesToRadians( worldFieldOfView / 2 ) ) * self.positionVector.z ) + kSizeOfBoid; // also not / 2
     float zNearBound = -( worldNearPlane + kSizeOfBoid );
     float zFarBound = -( worldFarPlane - kSizeOfBoid );
     GLKVector3 worldSize = GLKVector3Make(xBound, yBound, 100.0f);
@@ -139,6 +148,7 @@
     
     // Repopulate the neighbor arrays
     for ( SteeringBehavior *behavior in self.behaviors ) {
+        
         [behavior.neighbors removeAllObjects];
         
         for ( Boid *otherBoid in otherBoids ) {
@@ -147,24 +157,25 @@
         
         GLKVector3 adjustmentVector = [behavior calculateAdjustmentVector];
         steeringVector = GLKVector3Add( steeringVector, adjustmentVector );
-        
-        // if the steering vector force is too great scale it down to kMaxSteeringVectorMagnitude
-        float steeringVectorMagnitude = GLKVector3Length( steeringVector );
-        if ( steeringVectorMagnitude > kMaxSteeringVectorMagnitude ) {
-            steeringVector = GLKVector3Normalize( steeringVector );
-            steeringVector = GLKVector3MultiplyScalar( steeringVector, kMaxSteeringVectorMagnitude );
-        }
-        
-        steeringVector = GLKVector3MultiplyScalar( steeringVector, self.mass );
-        self.velocityVector = GLKVector3Add( steeringVector, self.velocityVector );
-        
-        // scale the velocity if magnitude greater than speed
-        float velocityVectorMagnitude = GLKVector3Length( self.velocityVector );
-        if ( velocityVectorMagnitude > self.speed ) {
-            self.velocityVector = GLKVector3Normalize( self.velocityVector );
-            self.velocityVector = GLKVector3MultiplyScalar( self.velocityVector, self.speed );
-        }
     }
+    
+    // if the steering vector force is too great scale it down to kMaxSteeringVectorMagnitude
+    float steeringVectorMagnitude = GLKVector3Length( steeringVector );
+    if ( steeringVectorMagnitude > kMaxSteeringVectorMagnitude ) {
+        steeringVector = GLKVector3Normalize( steeringVector );
+        steeringVector = GLKVector3MultiplyScalar( steeringVector, kMaxSteeringVectorMagnitude );
+    }
+    
+    steeringVector = GLKVector3MultiplyScalar( steeringVector, self.mass );
+    self.velocityVector = GLKVector3Add( steeringVector, self.velocityVector );
+    
+    // scale the velocity if magnitude greater than speed
+    float velocityVectorMagnitude = GLKVector3Length( self.velocityVector );
+    if ( velocityVectorMagnitude > self.speed ) {
+        self.velocityVector = GLKVector3Normalize( self.velocityVector );
+        self.velocityVector = GLKVector3MultiplyScalar( self.velocityVector, self.speed );
+    }
+
 }
 
 

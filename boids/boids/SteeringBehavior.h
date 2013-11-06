@@ -18,11 +18,17 @@
 
 @property (nonatomic, retain) Boid *owner;
 
-@property (nonatomic, assign) float weight;
+@property (nonatomic, assign) float weight;\
+
+@property (nonatomic, assign) float awarenessRadius;
+
+@property (nonatomic, assign) float viewConeAngle;
 
 
 - (id)initWithOwner:(Boid*)owner
-             weight:(float)weight;
+             weight:(float)weight
+    awarenessRadius:(float)awarenessRadius
+      viewConeAngle:(float)viewConeAngle;
 
 - (void)addNeighbor:(Boid*)boid;
 

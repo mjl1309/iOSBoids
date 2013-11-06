@@ -136,7 +136,7 @@ GLfloat gCubeVertexData[216] =
     [self.view addGestureRecognizer:tapRecognizer];
     
     _nearClippingPlaneDist = 5.0f;
-    _farClippingPlaneDist = 20.0f;
+    _farClippingPlaneDist = 30.0f;
     _fov = 45.0f;
 }
 

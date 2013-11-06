@@ -32,6 +32,7 @@
 
 @property (nonatomic, assign) float mass;
 
+
 - (void)updateWithTime:(NSTimeInterval)dt
       worldFieldOfView:(float)worldFieldOfView
       worldAspectRatio:(float)worldAspectRation

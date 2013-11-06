@@ -12,12 +12,16 @@
 @implementation SteeringBehavior
 
 - (id)initWithOwner:(Boid*)owner
-             weight:(float)weight {
+             weight:(float)weight
+    awarenessRadius:(float)awarenessRadius
+      viewConeAngle:(float)viewConeAngle {
     self = [super init];
     if ( self ) {
         self.owner = owner;
         self.weight = weight;
         self.neighbors = [[NSMutableArray alloc] init];
+        self.awarenessRadius = awarenessRadius;
+        self.viewConeAngle = viewConeAngle;
     }
     return self;
 }
@@ -25,7 +29,13 @@
 - (void)addNeighbor:(Boid*)boid {
     // do stuff for vision cone here
     if ( boid != self.owner ) {
-        [self.neighbors addObject:boid];
+        float cosAngle = GLKVector3DotProduct( self.owner.forwardVector, boid.forwardVector );
+        GLKVector3 distanceVector = GLKVector3Subtract( self.owner.positionVector, boid.positionVector );
+        float distanceMagnitude = GLKVector3Length( distanceVector );
+        float minCosAngle = cosf( GLKMathDegreesToRadians(self.viewConeAngle) );
+        if ( (distanceMagnitude < self.awarenessRadius) && (cosAngle >= minCosAngle) ) {
+            [self.neighbors addObject:boid];
+        }
     }
 }
 
